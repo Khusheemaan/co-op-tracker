@@ -1,0 +1,15 @@
+{% extends "tracker/base.html" %}
+{% block title %}My Applications{% endblock %}
+{% block content %}
+<h1>My Applications</h1>
+<p><a href="/applications/add/">+ Add an application</a></p>
+<ul>
+    {% for application in applications %}
+    <li>
+        <a href="/applications/{{ application.pk }}/">{{ application }}</a> - status: {{ application.status }}</li>
+    {% empty %}
+    <li>No applications yet.</li>
+    {% endfor %}   
+</ul>
+{% endblock %}
+

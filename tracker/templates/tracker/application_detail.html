@@ -1,0 +1,30 @@
+{% extends "tracker/base.html" %}
+{% block title %}{{ application }}{% endblock %}
+{% block content %}
+<p><a href="/applications/">← Back to all applications</a></p>
+<h1>{{ application }}</h1>
+
+<p>Status: {{ application.status }}</p>
+<p>Notes: {{ application.notes }}</p>
+
+<h2>History</h2>
+<ul>
+    {% for event in application.statusevent_set.all %}
+      <li>{{ event.from_status }} -> {{ event.to_status}} (at {{event.created_at }})</li>
+    {% empty %}
+      <li>No changes yet.</li>
+    {% endfor %}   
+</ul>
+
+<h2>Move this application</h2>
+{% if allowed %}
+    <form method = "post">  
+        {% csrf_token %}  
+        {% for status in allowed %}
+            <button name = "new_status" value = "{{ status.value }}">{{ status.label }}</button>
+        {% endfor %}    
+    </form>
+    {% else %}
+    <p>This application is in a final state; no moves available.</p>
+    {% endif %}
+{% endblock %}

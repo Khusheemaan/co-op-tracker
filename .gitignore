@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.pyc
+
+# Code Runner extension scratch file (not part of the project)
+tempCodeRunnerFile.py
+
+# Virtual environment (never commit this — it's big and machine-specific)
+venv/
+
+# Local database (starts fresh on each machine)
+db.sqlite3
+
+# Secrets / environment variables
+.env
