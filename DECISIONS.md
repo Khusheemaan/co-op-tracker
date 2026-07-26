@@ -1,12 +1,12 @@
 # Decision Log
 
-One line per real decision I make while building this. This file IS my interview prep —
+One line per real decision I make while building this. This file IS my interview prep
 every entry is an answer to "why did you...?" or "tell me about a time you..." Keep it
 honest and in my own words.
 
 - Chose **Django** over Next.js because I'm still learning: Django gives me the database
   layer, user login, and an admin panel out of the box, so there are fewer separate tools
-  to learn — and this project's hard part (scraping + scheduled jobs) is Python's strength.
+  to learn and this project's hard part (scraping + scheduled jobs) is Python's strength.
 - Chose **SQLite** for local development (zero setup, it's just a file on disk) and will
   switch to **PostgreSQL** at deploy time, because Postgres handles real concurrent traffic
   and is what a hosted app needs.
