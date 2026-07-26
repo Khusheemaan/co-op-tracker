@@ -7,7 +7,7 @@ honest and in my own words.
 - Chose **Django** over Next.js because I'm still learning: Django gives me the database
   layer, user login, and an admin panel out of the box, so there are fewer separate tools
   to learn — and this project's hard part (scraping + scheduled jobs) is Python's strength.
-- Chose **SQLite** for local development (zero setup — it's just a file on disk) and will
+- Chose **SQLite** for local development (zero setup, it's just a file on disk) and will
   switch to **PostgreSQL** at deploy time, because Postgres handles real concurrent traffic
   and is what a hosted app needs.
 
@@ -35,11 +35,11 @@ honest and in my own words.
   Example : a traffic light, green->yellow->red->green
   a package, ordered->shipped->out for delivery-> delivered->shipped
 
-- Walk me through your state machine — which transitions are legal, and how do you enforce that?
+- Walk me through your state machine, which transitions are legal, and how do you enforce that?
   Answer :
 
 - What is StatusEvent for?
-  Answer : It's an immutable log — a permanent record where every time an
+  Answer : It's an immutable log, a permanent record where every time an
   application's status changes, you write one row saying: this application went from X to Y at this time. That's your audit trail, and it's the concrete thing behind the interview answer "how do you track an application's history?" — you don't guess, you have a dated log of every
   move.
 
