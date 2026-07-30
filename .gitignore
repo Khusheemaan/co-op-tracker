@@ -11,5 +11,8 @@ venv/
 # Local database (starts fresh on each machine)
 db.sqlite3
 
+# Static files collected for deployment (generated on the server)
+staticfiles/
+
 # Secrets / environment variables
 .env
