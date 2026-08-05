@@ -6,7 +6,11 @@
 <ul>
     {% for application in applications %}
     <li>
-        <a href="/applications/{{ application.pk }}/">{{ application }}</a> - status: {{ application.status }}</li>
+        <a href="/applications/{{ application.pk }}/">{{ application }}</a> - status: {{ application.status }}
+        {% if application.posting.url %}
+        — <a href="{{ application.posting.url }}" target="_blank" rel="noopener">Apply ↗</a>
+        {% endif %}
+    </li>
     {% empty %}
     <li>No applications yet.</li>
     {% endfor %}   

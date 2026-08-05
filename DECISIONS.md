@@ -45,3 +45,10 @@ honest and in my own words.
 
 - Update Week 3:
   Built a state machine that enforces legal transitions and auto-logs every change to a StatusEvent history table.
+
+- Week 4: Why did you use a hash function in the step 5 (making sure that no duplicates are present amongst the applications)?
+  Answer : If all you wanted was "no duplicates," a plain uniqueness rule on the URL would do the job. The hash earns its extra complexity because it also catches edits and works identically across any job board.  
+ * A hash function takes any text → returns a short, fixed-length string. Three rules:
+1. Same input always gives the same output.
+2. Change even one character → a completely different output.
+3. You can't reverse it back to the original.

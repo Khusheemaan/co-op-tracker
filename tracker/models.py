@@ -27,6 +27,7 @@ class Posting(models.Model): # defiines a table called Posting
     url = models.URLField(blank = True)
     closes_at = models.DateField(null = True, blank = True)
     created_at = models.DateTimeField(auto_now_add = True) #a timestamp django fills automatically, the moment when a row is created.
+    content_hash = models.CharField(max_length = 64, blank = True, default = "", db_index = True)
 
     def __str__(self):
         return f"{self.title} at {self.company}" #Tells django how to label a posting in plain english.
