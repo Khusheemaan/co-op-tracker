@@ -27,8 +27,14 @@ class Command(BaseCommand):
         saved_count = 0
         for company in companies:
             url = f"https://boards-api.greenhouse.io/v1/boards/{company}/jobs"
-            response = requests.get(url)
-            data = response.json()
+            try:
+                response = requests.get(url, timeout = 10)
+                response.raise_for_status() #turns an http error into a catchable exception.
+                data = response.json()
+            except Exception as e:
+                self.stdout.write(self.style.WARNING(f"Skipping {company}:{e}"))
+
+                continue
 
             for job in data["jobs"]:
                 title = job["title"]
