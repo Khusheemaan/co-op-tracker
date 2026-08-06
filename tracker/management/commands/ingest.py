@@ -1,9 +1,11 @@
 from django.core.management.base import BaseCommand
 import requests
 import hashlib
+import re
 
 from tracker.models import Posting, Application
 
+KEYWORD_PATTERN = re.compile(r"\bintern(s|ship|ships)?\b|\bco-?ops?\b|\bstudents?\b")
 
 def normalize(job):
     return {
@@ -38,8 +40,7 @@ class Command(BaseCommand):
 
             for job in data["jobs"]:
                 title = job["title"]
-                words = title.lower().split()
-                if "intern" in words or "co-op" in words:
+                if KEYWORD_PATTERN.search(title.lower()):
                     posting_data = normalize(job)
                     posting_hash = content_hash(posting_data)
                     if Posting.objects.filter(content_hash=posting_hash).exists():
