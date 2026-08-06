@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils import timezone
+from datetime import timedelta
 
 #list of valid states
 class Status(models.TextChoices):
@@ -51,6 +53,9 @@ class Application(models.Model):
             StatusEvent.objects.create(application = self, from_status = self.status, to_status = new_status)
             self.status = new_status
             self.save()
+    @property
+    def is_new(self):
+        return timezone.now() - self.created_at < timedelta(hours = 24)
     
         
 

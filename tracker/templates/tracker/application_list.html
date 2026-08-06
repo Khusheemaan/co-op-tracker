@@ -6,7 +6,9 @@
 <ul>
     {% for application in applications %}
     <li>
-        <a href="/applications/{{ application.pk }}/">{{ application }}</a> - status: {{ application.status }}
+        <a href="/applications/{{ application.pk }}/">{{ application }}</a>
+        {% if application.is_new %}<span class="new">NEW</span>{% endif %}
+        - status: {{ application.status }}
         {% if application.posting.url %}
         — <a href="{{ application.posting.url }}" target="_blank" rel="noopener">Apply ↗</a>
         {% endif %}
