@@ -7,12 +7,28 @@ from tracker.models import Posting, Application
 
 KEYWORD_PATTERN = re.compile(r"\bintern(s|ship|ships)?\b|\bco-?ops?\b|\bstudents?\b")
 
-def normalize(job):
+SOURCES = [
+    {"ats": "greenhouse", "token": "stripe", "company": "Stripe"},
+    {"ats": "greenhouse", "token": "cloudflare", "company": "Cloudflare"},
+    {"ats": "greenhouse", "token": "faire", "company": "Faire"},
+    {"ats": "ashby", "token": "cohere", "company": "Cohere"},
+    {"ats": "ashby", "token": "1Password", "company": "1Password"},
+]
+
+def normalize_greenhouse(job, company):
     return {
-        "company": job["company_name"],
+        "company": company,
         "title": job["title"],
         "url": job["absolute_url"],
         "location": job["location"]["name"],
+    }
+
+def normalize_ashby(job, company):
+    return {
+        "company": company,
+        "title": job["title"],
+        "url": job["jobUrl"],
+        "location": job["location"],
     }
 
 def content_hash(posting_data):
@@ -24,24 +40,32 @@ class Command(BaseCommand):
     help = "Fetch job postings from sources and save the co-op/intern ones."
 
     def handle(self, *args, **options):
-        companies = ["stripe", "cloudflare", "faire"]
-
         saved_count = 0
-        for company in companies:
-            url = f"https://boards-api.greenhouse.io/v1/boards/{company}/jobs"
+        for source in SOURCES:
+            ats = source["ats"]
+            token = source["token"]
+            company = source["company"]
+
+            if ats == "greenhouse":
+                url = f"https://boards-api.greenhouse.io/v1/boards/{token}/jobs"
+            elif ats == "ashby":
+                url = f"https://api.ashbyhq.com/posting-api/job-board/{token}?includeCompensation=true"
+
             try:
-                response = requests.get(url, timeout = 10)
-                response.raise_for_status() #turns an http error into a catchable exception.
+                response = requests.get(url, timeout=10)
+                response.raise_for_status()
                 data = response.json()
             except Exception as e:
-                self.stdout.write(self.style.WARNING(f"Skipping {company}:{e}"))
-
+                self.stdout.write(self.style.WARNING(f"Skipping {token}: {e}"))
                 continue
 
             for job in data["jobs"]:
                 title = job["title"]
                 if KEYWORD_PATTERN.search(title.lower()):
-                    posting_data = normalize(job)
+                    if ats == "greenhouse":
+                        posting_data = normalize_greenhouse(job, company)
+                    elif ats == "ashby":
+                        posting_data = normalize_ashby(job, company)
                     posting_hash = content_hash(posting_data)
                     if Posting.objects.filter(content_hash=posting_hash).exists():
                         continue
